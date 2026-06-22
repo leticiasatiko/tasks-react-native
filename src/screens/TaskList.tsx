@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { View, Text, ImageBackground, StyleSheet, FlatList, TouchableOpacity, Platform } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import todayImage from '../../assets/imgs/today.jpg'
 import moment from 'moment'
 import 'moment/locale/pt-br'
@@ -70,10 +71,15 @@ export default class TaskList extends Component {
         this.setState({ tasks, showAddTask: false }, this.filterTasks)
     }
 
+    deleteTask = (taskId: any) => {
+        const tasks = this.state.tasks.filter(task => task.id !== taskId)
+        this.setState({ tasks }, this.filterTasks)
+    }
+
     render() {
         const today = moment().locale('pt-br').format('ddd, D [de] MMMM')
         return (
-            <View style={styles.container}>
+            <GestureHandlerRootView style={styles.container}>
                 <AddTask isVisible={this.state.showAddTask} onCancel={() => this.setState({ showAddTask: false })} onSave={this.addTask} />
                 <ImageBackground source={todayImage} style={styles.background}>
                     <View style={styles.iconBar}>
@@ -90,13 +96,13 @@ export default class TaskList extends Component {
                     <FlatList 
                         data={this.state.visibleTasks}
                         keyExtractor={item => `${item.id}`}
-                        renderItem={({ item }) => <Task {...item} toggleTask={this.toggleTask} />}
+                        renderItem={({ item }) => <Task {...item} onToggleTask={this.toggleTask} onDelete={this.deleteTask} />}
                     />
                 </View>
                 <TouchableOpacity onPress={() => this.setState({ showAddTask: true })} style={styles.addButton} activeOpacity={0.7}>
                     <Icon name="plus" size={20} color={commonStyles.colors.secondary} />
                 </TouchableOpacity>
-            </View>
+            </GestureHandlerRootView>
         )
     }
 }
