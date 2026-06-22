@@ -5,7 +5,7 @@ export default class TaskList extends Component {
     render() {
         return (
             <View>
-                <Text>TeskList</Text>
+                <Text>TaskList</Text>
             </View>
         )
     }
