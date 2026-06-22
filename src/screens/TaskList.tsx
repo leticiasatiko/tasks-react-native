@@ -56,11 +56,25 @@ export default class TaskList extends Component {
         this.setState({ tasks: tasks }, this.filterTasks)
     }
 
+    addTask = (newTask: any) => {
+        if(!newTask.desc || !newTask.desc.trim()) {
+            return
+        }
+        const tasks = [...this.state.tasks]
+        tasks.push({
+            id: Math.random(),
+            desc: newTask.desc,
+            estimateAt: newTask.date,
+            doneAt: null
+        })
+        this.setState({ tasks, showAddTask: false }, this.filterTasks)
+    }
+
     render() {
         const today = moment().locale('pt-br').format('ddd, D [de] MMMM')
         return (
             <View style={styles.container}>
-                <AddTask isVisible={this.state.showAddTask} onCancel={() => this.setState({ showAddTask: false })} />
+                <AddTask isVisible={this.state.showAddTask} onCancel={() => this.setState({ showAddTask: false })} onSave={this.addTask} />
                 <ImageBackground source={todayImage} style={styles.background}>
                     <View style={styles.iconBar}>
                         <TouchableOpacity onPress={this.toggleFilter}>
