@@ -10,7 +10,7 @@ module.exports = app => {
         obterHash(req.body.password, hash => {
             const password = hash;
             app.db('users')
-                .insert({ name: req.body.name, email: req.body.email, password })
+                .insert({ name: req.body.name, email: req.body.email.toLowerCase(), password })
                 .then(_ => res.status(204).send())
                 .catch(err => res.status(400).json(err));
         });
